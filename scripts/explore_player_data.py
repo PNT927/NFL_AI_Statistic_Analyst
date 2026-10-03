@@ -1,5 +1,5 @@
 import nflreadpy as nfl
-from app.stats import get_player_stat
+from app.stats import get_player_stat, get_stat_leaders
 
 current_season = nfl.get_current_season()
 
@@ -32,7 +32,11 @@ print(f"Latest available week: {player_stats['week'].max()}")
 
 print(player_stats[important_columns].head(10).to_string(index=False))
 
-player_name = "Bijan Robinson"
+player_name = ("Bijan Robinson")
 stat = "rushing_yards"
 result = get_player_stat(player_stats, player_name, stat)
 print(f"\n {player_name} {stat}: {result}")
+
+leaders = get_stat_leaders(player_stats, "receiving_yards")
+print("\n receiving yards leaders: ")
+print(leaders)
