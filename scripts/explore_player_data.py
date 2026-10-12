@@ -1,5 +1,5 @@
 import nflreadpy as nfl
-from app.stats import get_player_stat, get_stat_leaders
+from app.stats import get_player_stat, get_stat_leaders, get_recent_player_stats, compare_players
 
 current_season = nfl.get_current_season()
 
@@ -40,3 +40,21 @@ print(f"\n {player_name} {stat}: {result}")
 leaders = get_stat_leaders(player_stats, "receiving_yards")
 print("\n receiving yards leaders: ")
 print(leaders)
+
+
+player_name = "Kirk Cousins"
+stat = "passing_yards"
+num_games = 3
+result = get_recent_player_stats(
+    player_stats,player_name,stat,num_games
+)
+print(f"\n {player_name} {stat}: {result}")
+
+
+player1 = "Bijan Robinson"
+player2 = "Jahmyr Gibbs"
+stat = "rushing_yards"
+comparison = compare_players(player_stats, player1, player2, stat)
+
+print("\n Player comparison: ")
+print(comparison)
