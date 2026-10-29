@@ -17,16 +17,15 @@ def get_player_stat(player_stats, player_name, stat):
     return total
 
 def get_stat_leaders(player_stats, stat):
+    if stat not in player_stats.columns:
+        raise ValueError(f"statistic '{stat}' is not supported. ")
+
     leaders = (player_stats
                .groupby("player_display_name")[stat]
                .sum()
                .sort_values( ascending=False)
                .head(10)
                )
-
-    if stat not in player_stats.columns:
-        raise ValueError(f"statistic '{stat}' is not supported. ")
-
     return leaders
 
 def get_recent_player_stats(player_stats, player_name, stat, num_games):
