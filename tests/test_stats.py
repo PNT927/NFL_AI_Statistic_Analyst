@@ -136,3 +136,87 @@ def test_compare_players():
 
     # Check that the difference is 5 yards.
     assert result["difference"] == 5
+
+# TEST 7: Check that an unsupported player statistic is rejected.
+def test_invalid_player_stat():
+
+    # Create a dataset with one player and one available statistic.
+    player_stats = pd.DataFrame({
+        "player_display_name": ["Patrick Mahomes"],
+        "passing_yards": [300]
+    })
+
+    # We expect a ValueError because rushing_yards is not a column.
+    with pytest.raises(ValueError):
+        get_player_stat(
+            player_stats,
+            "Patrick Mahomes",
+            "rushing_yards"
+        )
+
+# TEST 8: Check that a tie between two players is handled correctly.
+def test_compare_players_tie():
+
+    # Create a dataset where both players finish with 180 rushing yards.
+    player_stats = pd.DataFrame({
+        "player_display_name": [
+            "Bijan Robinson",
+            "Jahmyr Gibbs",
+            "Bijan Robinson",
+            "Jahmyr Gibbs"
+        ],
+        "week": [1, 1, 2, 2],
+        "rushing_yards": [100, 120, 80, 60]
+    })
+
+    # Compare both players.
+    result = compare_players(
+        player_stats,
+        "Bijan Robinson",
+        "Jahmyr Gibbs",
+        "rushing_yards"
+    )
+    # Check that both players have the same total.
+    assert result["player1_total"] == 180
+    assert result["player2_total"] == 180
+
+    # Check that the comparison identifies a tie.
+    assert result["leader"] == "Tie"
+    # Check that the difference is zero.
+    assert result["difference"] == 0
+
+# TEST 9: Check that requesting zero recent games raises an error.
+def test_recent_player_stats_zero_games():
+
+    # Create a small dataset containing one valid player.
+    player_stats = pd.DataFrame({
+        "player_display_name": ["Patrick Mahomes"],
+        "week": [1],
+        "passing_yards": [300]
+    })
+
+    # We expect a ValueError because zero games is invalid.
+    with pytest.raises(ValueError):
+        get_recent_player_stats(
+            player_stats,
+            "Patrick Mahomes",
+            "passing_yards",
+            0
+        )
+
+
+def test_compare_players_second_player_wins():
+    player_stats = pd.DataFrame({
+        "player_display_name": ["Bijan Robinson", "Jahmyr Gibbs"],
+        "rushing_yards": [80, 120]
+    })
+
+    result = compare_players(
+        player_stats,
+        "Bijan Robinson",
+        "Jahmyr Gibbs",
+        "rushing_yards"
+    )
+
+    assert result["leader"] == "Jahmyr Gibbs"
+    assert result["difference"] == 40
