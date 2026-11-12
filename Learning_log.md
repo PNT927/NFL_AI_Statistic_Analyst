@@ -77,10 +77,39 @@ Develop an AI-powered NFL statistics and fantasy analysis application using Pyth
 - Web interface
 - Data refresh, testing and deployment
 
-## Questions to answer after each session
+## Session 6 — NFL Fantasy Scoring Engine
 
-1. What did I build?
-2. Why did I implement it this way?
-3. How did I verify it works?
-4. What problems did I encounter?
-5. How would I explain this feature to an interviewer
+### What I built
+- Developed `app/fantasy.py` to calculate NFL fantasy points.
+- Implemented standard, half-PPR and full-PPR scoring.
+- Integrated real 2026 NFL statistics using nflreadpy and Pandas.
+- Added a FastAPI endpoint to calculate weekly player fantasy points.
+- Created automated tests for scoring calculations and API responses.
+
+### Python concepts learned
+- Dictionaries and key-value pairs.
+- Functions, parameters and return values.
+- For loops and conditional statements.
+- `.get()`, `.copy()`, `.strip()`, `.iloc[0]` and `.to_dict()`.
+- Pandas DataFrame filtering.
+- Error handling using `try/except`.
+- API endpoints, JSON responses and HTTP status codes.
+- Automated testing using pytest.
+
+### Problems solved
+- Corrected mismatched dataset column names.
+- Used `fumbles_lost_total` to avoid double-counting turnovers.
+- Fixed a player lookup issue caused by trailing whitespace.
+- Implemented appropriate HTTP responses for invalid requests.
+
+### Verification
+- Bijan Robinson Week 1 PPR: 31.3 calculated points.
+- Dataset reference: 31.3 points.
+- Swagger API requests returned the expected 200, 400 and 404 statuses.
+- All 21 automated tests passed.
+- One non-blocking dependency deprecation warning remains.
+
+### What I should remember
+The API receives a request, filters the dataset, converts the selected player record into a dictionary, passes it to the scoring function and returns the result as JSON.
+
+Automated tests verify that the application behaves correctly for both valid and invalid inputs.
