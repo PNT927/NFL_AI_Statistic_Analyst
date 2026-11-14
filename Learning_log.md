@@ -113,3 +113,39 @@ Develop an AI-powered NFL statistics and fantasy analysis application using Pyth
 The API receives a request, filters the dataset, converts the selected player record into a dictionary, passes it to the scoring function and returns the result as JSON.
 
 Automated tests verify that the application behaves correctly for both valid and invalid inputs.
+
+
+## Session 7 – Recent Fantasy Performance
+Date: 14 November 2026
+
+### Implemented
+- Recent fantasy performance function.
+- Regular-season filtering and game selection.
+- Total and average fantasy points.
+- Individual game fantasy scores.
+- Input validation and exception handling.
+- Recent fantasy performance FastAPI endpoint.
+- Seven additional fantasy engine tests.
+- Four additional API tests.
+
+### Concepts learned
+- Pandas iterrows() and to_dict().
+- Selecting recent records using sort_values() and head().
+- Python list manipulation using append().
+- Calculating totals and averages using sum() and len().
+- Returning structured dictionaries.
+- Reusing existing functions.
+- Positional and keyword arguments.
+- Testing exceptions using pytest.raises().
+- Automated API testing using TestClient.
+
+### Challenges
+- Constructing functions independently.
+- Creating DataFrames from dictionaries.
+- Remembering the order of function arguments.
+- Understanding how to isolate invalid inputs during testing.
+
+### Results
+- All 32 automated tests passed.
+- Successful API requests returned HTTP 200.
+- Invalid inputs returned HTTP 400.

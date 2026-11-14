@@ -62,3 +62,47 @@ def test_fantasy_player_not_found():
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Player not found for the selected week"
+
+
+def test_recent_fantasy_performance_endpoint():
+    response = client.get(
+        "/players/Bijan%20Robinson/fantasy/ppr/recent/3"
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["player_name"] == "Bijan Robinson"
+    assert data["scoring"] == "ppr"
+    assert data["games_played"] == 3
+    assert len(data["fantasy_scores"]) == 3
+    assert data["total_points"] == sum(data["fantasy_scores"])
+    assert data["average_points"] == round(data["total_points"] / 3, 2)
+
+
+def test_recent_fantasy_endpoint_invalid_player():
+    response = client.get(
+        "/players/Unknown%20Player/fantasy/ppr/recent/3"
+    )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Player not found in regular-season data."
+
+
+def test_recent_fantasy_endpoint_invalid_game_count():
+    response = client.get(
+        "/players/Bijan%20Robinson/fantasy/ppr/recent/0"
+    )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Number of games must be greater than zero."
+
+
+def test_recent_fantasy_endpoint_invalid_scoring():
+    response = client.get(
+        "/players/Bijan%20Robinson/fantasy/invalid/recent/3"
+    )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Unsupported scoring format"

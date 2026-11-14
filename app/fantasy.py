@@ -35,6 +35,48 @@ def calculate_fantasy_points(player_stats: dict, scoring: str = "standard") -> f
 
     return round(total, 2)
 
+def get_recent_fantasy_performance(player_stats, player_name, num_games, scoring="standard"):
+
+    # Filter player and regular-season games
+    filt = (player_stats["player_display_name"] == player_name) & (player_stats["season_type"] == "REG")
+    player_data = player_stats.loc[filt]
+
+    # Validate inputs
+    if player_data.empty:
+        raise ValueError("Player not found in regular-season data.")
+
+    if num_games <= 0:
+        raise ValueError("Number of games must be greater than zero.")
+
+    # Retrieve most recent games
+    sorted_data = player_data.sort_values(by="week", ascending=False)
+    recent_games = sorted_data.head(num_games)
+
+    # Calculate fantasy points for each game
+    fantasy_scores = []
+
+    for index, row in recent_games.iterrows():
+        game_stats = row.to_dict()
+        points = calculate_fantasy_points(game_stats, scoring)
+        fantasy_scores.append(points)
+
+    # Calculate performance metrics
+    total_points = sum(fantasy_scores)
+    games_played = len(fantasy_scores)
+    average_points = round(total_points / games_played, 2)
+
+    # Return results
+    result = {
+        "player_name": player_name,
+        "scoring": scoring,
+        "games_played": games_played,
+        "total_points": total_points,
+        "average_points": average_points,
+        "fantasy_scores": fantasy_scores
+    }
+
+    return result
+
 
 if __name__ == "__main__":
     example_player = {

@@ -2,7 +2,8 @@ from fastapi import FastAPI, HTTPException
 import nflreadpy as nfl
 
 from app.stats import get_player_stat
-from app.fantasy import calculate_fantasy_points
+from app.fantasy import calculate_fantasy_points, get_recent_fantasy_performance
+
 app = FastAPI(title="NFL Statistics Analyst API")
 
 # Load the 2026 NFL player statistics
@@ -68,3 +69,14 @@ def fantasy(player_name: str, scoring: str, week: int):
         "scoring": scoring,
         "fantasy_points": points
     }
+
+@app.get("/players/{player_name}/fantasy/{scoring}/recent/{num_games}")
+def recent_fantasy_performance(player_name: str, scoring: str, num_games: int):
+    player_name = player_name.strip()
+
+    try:
+        result = get_recent_fantasy_performance(player_stats, player_name, num_games, scoring)
+        return result
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
